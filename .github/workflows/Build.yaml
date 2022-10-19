@@ -3,7 +3,7 @@ on:
   workflow_dispatch:
 
 env:
-  REGISTRY_NAME: "acrlab0010"
+  REGISTRY_NAME: "acrlab009rmo"
   APP_NAME: "coolapi"
   IMAGE_VERSION: "1.0.0"
 
@@ -77,14 +77,13 @@ jobs:
           cd ./Lab_10/API/ && docker build -t ${{ env.REGISTRY_NAME}}.azurecr.io/${{ env.APP_NAME }}:${{ env.IMAGE_VERSION }} .
           docker image ls
 
+      - name: Push de l'image de l'application
+        run: |
+          docker push ${{ env.REGISTRY_NAME}}.azurecr.io/${{ env.APP_NAME }}:${{ env.IMAGE_VERSION }}
+
       - name: Scan Image
         uses: Azure/container-scan@v0 
         id: container-scan
         continue-on-error: true
         with:
           image-name: ${{ env.REGISTRY_NAME}}.azurecr.io/${{ env.APP_NAME }}:${{ env.IMAGE_VERSION }}
-
-      - name: Push de l'image de l'application
-        run: |
-          docker push ${{ env.REGISTRY_NAME}}.azurecr.io/${{ env.APP_NAME }}:${{ env.IMAGE_VERSION }}
-
